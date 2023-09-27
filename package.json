@@ -1,0 +1,23 @@
+{
+  "name": "xenub",
+  "version": "1.0.0",
+  "description": "Next-level backend proxy",
+  "main": "index.js",
+  "scripts": {
+    "test": "echo \"Error: no test specified\" && exit 1"
+  },
+  "keywords": [],
+  "author": "",
+  "license": "ISC",
+  "dependencies": {
+    "@tomphttp/bare-client": "^2.2.0-alpha",
+    "@tomphttp/bare-server-node": "^2.0.1",
+    "brotli": "^1.3.3",
+    "bun-types": "^1.0.2",
+    "compress-brotli": "^1.3.11",
+    "zlib": "^1.0.5"
+  },
+  "devDependencies": {
+    "@types/brotli": "^1.3.2"
+  }
+}
