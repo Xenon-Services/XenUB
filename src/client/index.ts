@@ -5,11 +5,13 @@ global._wrap = function wrap(obj: any, prop: string) {
 
     if (typeof fn !== "function") return fn;
 
-    const wrapped = function(this: any, ...args: any[]) {
+    const wrapped = fn.prototype ? function (this: any, ...args: any[]) {
         return fn.apply(this, args);
-    }
-
-    Object.setPrototypeOf(wrapped, fn);
+    } : {
+        func: (...args: any[]) => {
+            return fn.apply(obj, args);
+        }
+    }.func;
 
     return wrapped;
 }
