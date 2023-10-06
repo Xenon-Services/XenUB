@@ -8,8 +8,7 @@ export default class htmlrewriter {
 
         rewriter.on("*", {
             element: (element) => {
-                if (element.tagName == "body") {
-
+                if (element.tagName == "head") {
                     element.prepend(`<script src="${"/service/client.js"}"></script>`, { html: true });
                 }
 
@@ -26,7 +25,7 @@ export default class htmlrewriter {
                     }
                 }
 
-                for (var attr of element.attributes) {
+                for (const attr of element.attributes) {
                     if (element.tagName === "meta") continue;
 
                     if (attr[0] === "href" || attr[0] === "src" || attr[0] === "action") {

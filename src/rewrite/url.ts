@@ -5,4 +5,4 @@ export default {
     decode: (url: string, meta: URL): URL => {
         return new URL(decodeURIComponent(url.substring("/service/".length)), meta);
     }
-}
+};

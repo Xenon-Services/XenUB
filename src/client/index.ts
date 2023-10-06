@@ -1,7 +1,17 @@
-var global: any = globalThis;
+import './http.ts';
 
-global._wrap = function wrap(obj: any, prop: string) {
-    const fn: Function | undefined = obj[prop];
+declare global {
+    interface Window {
+        _wrap: (obj: WrapperObject, prop: string) => unknown;
+    }
+}
+
+interface WrapperObject {
+    [key: string]: (...args: unknown[]) => unknown;
+}
+
+window._wrap = function wrap(obj: WrapperObject, prop: string) {
+    const fn: (...args: unknown[]) => unknown | undefined = obj[prop];
 
     if (typeof fn !== "function") return fn;
 
@@ -13,5 +23,7 @@ global._wrap = function wrap(obj: any, prop: string) {
         }
     }.func;
 
+    if (fn.prototype) wrapped.prototype = fn.prototype;
+
     return wrapped;
-}
+};

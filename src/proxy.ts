@@ -1,10 +1,7 @@
-import type { Server } from "bun";
 import url from "./rewrite/url";
 import { Context } from "./types";
 import deflate from "./deflate";
 import htmlrewriter from "./rewrite/html";
-
-import "./client/index";
 
 function rewriteHeaders(headers: Headers, url: URL): Headers {
     const newHeaders = new Headers(headers);
@@ -58,20 +55,22 @@ function getURLMeta(path: string): URL {
 export default new class extends EventTarget {
     constructor() {
         super();
-    };
-    build = Bun.build(
-        {
-          entrypoints:[
-            'src/client/index.ts'
-          ],
-          outdir: 'dist',
-          minify: true,
-          sourcemap: "inline",
-        }
-    );
+    }
+    get build() {
+        return Bun.build(
+            {
+            entrypoints:[
+                'src/client/index.ts'
+            ],
+            outdir: 'dist',
+            minify: true,
+            sourcemap: "inline",
+            }
+        );
+    }
     url: Context["url"] = url;
     html: htmlrewriter = new htmlrewriter(this);
-    async fetch(request: Request, server: Server): Promise<Response> {
+    async fetch(request: Request): Promise<Response> {
         const url = new URL(request.url);
 
         if (!url.pathname.startsWith("/service/")) {
@@ -98,7 +97,7 @@ export default new class extends EventTarget {
             redirect: "manual"
         });
         
-        let type = response.headers.get("content-type")?.split(";")[0];
+        const type = response.headers.get("content-type")?.split(";")[0];
         let body: ArrayBuffer | string | Blob | Buffer = new Blob(
             [
                 await deflate.decompress(
